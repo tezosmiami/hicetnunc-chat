@@ -23,13 +23,6 @@ wss.on('connection', (ws) => {
         ws,
     };
     users.add(userRef);
-    ws.current.send(
-        JSON.stringify({
-          sender: alias,
-          body: ' has left the conversation. . .',
-        })
-      );
-    
 
     ws.on('message', (message) => {
         console.log(message);
