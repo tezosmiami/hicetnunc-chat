@@ -23,6 +23,12 @@ wss.on('connection', (ws) => {
         ws,
     };
     users.add(userRef);
+    ws.current.send(
+        JSON.stringify({
+          sender: alias,
+          body: ' has left the conversation. . .',
+        })
+      );
     
 
     ws.on('message', (message) => {
@@ -60,12 +66,6 @@ wss.on('connection', (ws) => {
     ws.on('close', (code, reason) => {
         users.delete(userRef);
         console.log(`Connection closed: ${code} ${reason}!`);
-        ws.current.send(
-            JSON.stringify({
-              sender: alias,
-              body: ' has left the conversation. . .',
-            })
-          );
     });
 });
 
