@@ -1,16 +1,12 @@
 const express = require('express');
-const WebSocket = require('ws');
+const { Server } = require('ws');
 
+const PORT = process.env.PORT || 3000;
 
+const server = express()
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-const server = new WebSocket.Server({
-        port:process.env.PORT || 3000
-    },
-    () => {
-        console.log('Server started on port'+  process.env.PORT);
-    }
-);
-
+const wss = new Server({ server });
 const users = new Set();
 
 server.on('connection', (ws) => {
