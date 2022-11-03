@@ -9,7 +9,7 @@ const server = express()
 const wss = new Server({ server });
 const users = new Set();
 
-server.on('connection', (ws) => {
+wss.on('connection', (ws) => {
     const userRef = {
         ws,
     };
