@@ -17,7 +17,6 @@ const server = express()
 
 const wss = new Server({ server });
 const users = new Set();
-
 wss.on('connection', (socket) => {
     const userRef = {
         socket: socket, 
@@ -34,7 +33,13 @@ wss.on('connection', (socket) => {
                     body: 'joined the conversation. . .',
                     sentAt: Date.now()
                 }
+             const online = {body:[] }
+                for (user of users.values()){
+                     online.body.push(user.alias+' : ')  
+                }
+                sendMessage(online, socket)
                 sendMessage(messageToSend)
+
                 return
             }
             if (
@@ -69,7 +74,9 @@ wss.on('connection', (socket) => {
     });
 });
 
-const sendMessage = (message) => {
+const sendMessage = (message, socket) => {
+    console.log(message)
+    Array.isArray(message.body) ? socket.send(JSON.stringify(message)) :
     users.forEach((user) => {
         user.socket.send(JSON.stringify(message));
     });
