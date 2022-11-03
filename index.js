@@ -18,21 +18,25 @@ const server = express()
 const wss = new Server({ server });
 const users = new Set();
 
-wss.on('connection', (ws) => {
+wss.on('connection', (socket) => {
     const userRef = {
-        ws,
+        socket: socket, 
     };
     users.add(userRef);
 
-    ws.on('message', (message) => {
-        console.log(message);
+    socket.on('message', (message) => {
         try {
-
-            // Parsing the message
-            const data = JSON.parse(message);
-
-            // Checking if the message is a valid one
-
+            const data = JSON.parse(message); 
+            if (data.alias) {
+                userRef.alias = data.alias
+                const messageToSend = {
+                    sender: data.alias,
+                    body: 'joined the conversation. . .',
+                    sentAt: Date.now()
+                }
+                sendMessage(messageToSend)
+                return
+            }
             if (
                 typeof data.sender !== 'string' ||
                 typeof data.body !== 'string'
@@ -40,23 +44,26 @@ wss.on('connection', (ws) => {
                 console.error('Invalid message');
                 return;
             }
-
-            // Sending the message
-
-            const messageToSend = {
-                sender: data.sender,
-                body: data.body,
-                sentAt: Date.now()
-            }
-
+            else {
+                const messageToSend = {
+                    sender: data.sender,
+                    body: data.body,
+                    sentAt: Date.now()
+                }
             sendMessage(messageToSend);
-
+            }
         } catch (e) {
             console.error('Error passing message!', e)
         }
     });
 
-    ws.on('close', (code, reason) => {
+    socket.on('close', (code, reason) => {
+        const messageToSend = {
+            sender: user.alias,
+            body: 'left the conversation. . .',
+            sentAt: Date.now()
+        }
+        sendMessage(messageToSend)
         users.delete(userRef);
         console.log(`Connection closed: ${code} ${reason}!`);
     });
@@ -64,6 +71,6 @@ wss.on('connection', (ws) => {
 
 const sendMessage = (message) => {
     users.forEach((user) => {
-        user.ws.send(JSON.stringify(message));
+        user.socket.send(JSON.stringify(message));
     });
 }
