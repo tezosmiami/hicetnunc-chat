@@ -1,9 +1,18 @@
 const express = require('express');
 const { Server } = require('ws');
+const cors = require("cors");
 
 const PORT = process.env.PORT || 3000;
 
 const server = express()
+    .use(cors({
+        origin: [
+        'https://www.henmiami.xyz', 'https://www.hicetnunc.miami',
+        'https://www.hic.miami','https://www.hen.miami',
+        'https://henmiami.xyz/', 'https://hicetnunc.miami',
+        'https://hic.miami','https://hen.miami'
+        ]
+    }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const wss = new Server({ server });
