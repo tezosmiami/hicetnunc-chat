@@ -28,19 +28,21 @@ wss.on('connection', (socket) => {
             const data = JSON.parse(message); 
             if (data.alias) {
                 userRef.alias = data.alias
-                const messageToSend = {
-                    sender: data.alias,
-                    body: 'joined the conversation. . .',
-                    sentAt: Date.now()
-                }
-             const online = {body:[]}
-                for (user of users.values()){
-                    !online.body.includes('* ' + user.alias)
-                        && online.body.push('* ' + user.alias)  
-                }
+                const online = {body:[]}
+                    for (user of users.values()){
+                        !online.body.includes('* ' + user.alias)
+                            && online.body.push('* ' + user.alias)  
+                    }
                 sendMessage(online)
+               
+                if( user.counter == 0 ){
+                    const messageToSend = {
+                        sender: data.alias,
+                        body: 'joined the conversation. . .',
+                        sentAt: Date.now()
+                    }
                 sendMessage(messageToSend)
-
+                } 
                 return
             }
             if (
