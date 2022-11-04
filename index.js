@@ -85,7 +85,7 @@ const sendMessage = (message) => {
     console.log(Array.isArray(message))
     // Array.isArray(message) ? socket.send(JSON.stringify(message)) :
     users.forEach((user) => {
-        console.log(message)
+        // console.log(message)
         user.socket.send(JSON.stringify(message));
     });
 }
