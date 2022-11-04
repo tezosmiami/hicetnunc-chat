@@ -35,7 +35,7 @@ wss.on('connection', (socket) => {
                 }
              const online = {body:[] }
                 for (user of users.values()){
-                     user.alias !== userRef.alias && !online.body.includes(user.alias) 
+                     user.alias !== userRef.alias && !online.body.includes(user.alias+' : ') 
                         && online.body.push(user.alias+' : ')  
                 }
                 sendMessage(online, socket)
