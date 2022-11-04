@@ -33,12 +33,12 @@ wss.on('connection', (socket) => {
                     body: 'joined the conversation. . .',
                     sentAt: Date.now()
                 }
-             const online = {body:[] }
+             const online = {body:[]}
                 for (user of users.values()){
-                     user.alias !== userRef.alias && !online.body.includes(user.alias+' : ') 
-                        && online.body.push(user.alias+' : ')  
+                    !online.body.includes('* ' + user.alias)
+                        && online.body.push('* ' + user.alias)  
                 }
-                sendMessage(online, socket)
+                sendMessage(online)
                 sendMessage(messageToSend)
 
                 return
@@ -71,14 +71,21 @@ wss.on('connection', (socket) => {
         }
         sendMessage(messageToSend)
         users.delete(userRef);
+        const online = {body:[]}
+                for (user of users.values()){
+                    !online.body.includes('* ' + user.alias)
+                        && online.body.push('* ' + user.alias)  
+                }
+        sendMessage(online)
         console.log(`Connection closed: ${code} ${reason}!`);
     });
 });
 
-const sendMessage = (message, socket) => {
-    console.log(message)
-    Array.isArray(message.body) ? socket.send(JSON.stringify(message)) :
+const sendMessage = (message) => {
+    console.log(Array.isArray(message))
+    // Array.isArray(message) ? socket.send(JSON.stringify(message)) :
     users.forEach((user) => {
+        console.log(message)
         user.socket.send(JSON.stringify(message));
     });
 }
