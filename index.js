@@ -66,12 +66,12 @@ wss.on('connection', (socket) => {
     });
 
     socket.on('close', (code, reason) => {
-        const messageToSend = {
-            sender: user.alias,
-            body: 'left the conversation. . .',
-            sentAt: Date.now()
-        }
-        sendMessage(messageToSend)
+        // const messageToSend = {
+        //     sender: user.alias,
+        //     body: 'left the conversation. . .',
+        //     sentAt: Date.now()
+        // }
+        // sendMessage(messageToSend)
         users.delete(userRef);
         const online = {body:[]}
                 for (user of users.values()){
