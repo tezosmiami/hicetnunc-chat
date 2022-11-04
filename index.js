@@ -35,7 +35,7 @@ wss.on('connection', (socket) => {
                     }
                 sendMessage(online)
                
-                if( user.counter == 0 ){
+                if(data.counter == 0){
                     const messageToSend = {
                         sender: data.alias,
                         body: 'joined the conversation. . .',
