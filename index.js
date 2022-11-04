@@ -35,14 +35,14 @@ wss.on('connection', (socket) => {
                     }
                 sendMessage(online)
                
-                if(data.counter == 0){
-                    const messageToSend = {
-                        sender: data.alias,
-                        body: 'joined the conversation. . .',
-                        sentAt: Date.now()
-                    }
-                sendMessage(messageToSend)
-                } 
+                // if(data.counter == 0){
+                //     const messageToSend = {
+                //         sender: data.alias,
+                //         body: 'joined the conversation. . .',
+                //         sentAt: Date.now()
+                //     }
+                // sendMessage(messageToSend)
+                // } 
                 return
             }
             if (
