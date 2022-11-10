@@ -1,6 +1,6 @@
 const express = require('express');
 const { Server } = require('ws');
-// const cors = require("cors");
+const cors = require('cors');
 
 const PORT = process.env.PORT || 3000;
 
@@ -10,7 +10,7 @@ const server = express()
     //     'https://www.henmiami.xyz', 'https://www.hicetnunc.miami',
     //     'https://www.hic.miami','https://www.hen.miami',
     //     'https://henmiami.xyz/', 'https://hicetnunc.miami',
-    //     'https://hic.miami','https://hen.miami'
+    //     'https://hic.miami', 'https://hen.miami'
     //     ]
     // }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -30,8 +30,8 @@ wss.on('connection', (socket) => {
                 userRef.alias = data.alias
                 const online = {body:[]}
                     for (user of users.values()){
-                        !online.body.includes('* ' + user.alias)
-                            && online.body.push('* ' + user.alias)  
+                        !online.body.includes(user.alias)
+                            && online.body.push(user.alias)  
                     }
                 sendMessage(online)
                
@@ -75,8 +75,8 @@ wss.on('connection', (socket) => {
         users.delete(userRef);
         const online = {body:[]}
                 for (user of users.values()){
-                    !online.body.includes('* ' + user.alias)
-                        && online.body.push('* ' + user.alias)  
+                    !online.body.includes(user.alias)
+                        && online.body.push(user.alias)  
                 }
         sendMessage(online)
         console.log(`Connection closed: ${code} ${reason}!`);
