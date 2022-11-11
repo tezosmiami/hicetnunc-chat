@@ -6,14 +6,14 @@ const PORT = process.env.PORT || 3000;
 
 const server = express()
 
-server.use(cors({
-        origin: [
-        'https://www.henmiami.xyz', 'https://www.hicetnunc.miami',
-        'https://www.hic.miami','https://www.hen.miami',
-        'https://henmiami.xyz/', 'https://hicetnunc.miami',
-        'https://hic.miami', 'https://hen.miami', 'https://henmiami.netlify.app'
-        ]
-    }))
+// server.use(cors({
+//         origin: [
+//         'https://www.henmiami.xyz', 'https://www.hicetnunc.miami',
+//         'https://www.hic.miami','https://www.hen.miami',
+//         'https://henmiami.xyz/', 'https://hicetnunc.miami',
+//         'https://hic.miami', 'https://hen.miami', 'https://www.henmiami.netlify.app'
+//         ]
+//     }))
 
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
