@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const PORT = process.env.PORT || 3000;
 
-const server = express()
+const server = express().
 
 // server.use(cors({
 //         origin: [
@@ -15,7 +15,7 @@ const server = express()
 //         ]
 //     }))
 
-server.listen(PORT, () => console.log(`Listening on ${PORT}`));
+listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const wss = new Server({ server });
 const users = new Set();
