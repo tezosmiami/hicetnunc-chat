@@ -19,10 +19,12 @@ listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const wss = new Server({ server });
 const users = new Set();
+
 wss.on('connection', (socket) => {
     const userRef = {
         socket: socket, 
     };
+    // console.log(socket)
     users.add(userRef);
 
     socket.on('message', (message) => {
@@ -36,7 +38,8 @@ wss.on('connection', (socket) => {
                             && online.body.push(user.alias)  
                     }
                 sendMessage(online)
-               
+                return
+            } 
                 // if(data.counter == 0){
                 //     const messageToSend = {
                 //         sender: data.alias,
@@ -45,11 +48,10 @@ wss.on('connection', (socket) => {
                 //     }
                 // sendMessage(messageToSend)
                 // } 
-                return
-            }
             if (
                 typeof data.sender !== 'string' ||
-                typeof data.body !== 'string'
+                typeof data.body !== 'string' ||
+                typeof data.id !== 'number'
             ) {
                 console.error('Invalid message');
                 return;
@@ -58,6 +60,7 @@ wss.on('connection', (socket) => {
                 const messageToSend = {
                     sender: data.sender,
                     body: data.body,
+                    id: data.id,
                     sentAt: Date.now()
                 }
             sendMessage(messageToSend);
@@ -86,7 +89,7 @@ wss.on('connection', (socket) => {
 });
 
 const sendMessage = (message) => {
-    console.log(Array.isArray(message))
+    // console.log(Array.isArray(message))
     // Array.isArray(message) ? socket.send(JSON.stringify(message)) :
     users.forEach((user) => {
         // console.log(message)
