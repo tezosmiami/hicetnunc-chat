@@ -1,98 +1,28 @@
-const express = require('express');
-const { Server } = require('ws');
-const cors = require('cors');
+const express = require('express')
+const { ExpressPeerServer } = require('peer')
+const cors = require('cors')
 
-const PORT = process.env.PORT || 3000;
+var port = process.env.PORT || 8080
+const app = express();
+app.use(express.json());
+app.use(cors({
+    origin: '*'
+}));
 
-const server = express().
+app.get('/', (req, res, next) => res.send('Hello world!'));
 
-// server.use(cors({
-//         origin: [
-//         'https://www.henmiami.xyz', 'https://www.hicetnunc.miami',
-//         'https://www.hic.miami','https://www.hen.miami',
-//         'https://henmiami.xyz/', 'https://hicetnunc.miami',
-//         'https://hic.miami', 'https://hen.miami', 'https://www.henmiami.netlify.app'
-//         ]
-//     }))
+const server = app.listen(port);
 
-listen(PORT, () => console.log(`Listening on ${PORT}`));
-
-const wss = new Server({ server });
-const users = new Set();
-
-wss.on('connection', (socket) => {
-    const userRef = {
-        socket: socket, 
-    };
-    // console.log(socket)
-    users.add(userRef);
-
-    socket.on('message', (message) => {
-        try {
-            const data = JSON.parse(message); 
-            if (data.alias) {
-                userRef.alias = data.alias
-                const online = {body:[]}
-                    for (user of users.values()){
-                        !online.body.includes(user.alias)
-                            && online.body.push(user.alias)  
-                    }
-                sendMessage(online)
-                return
-            } 
-                // if(data.counter == 0){
-                //     const messageToSend = {
-                //         sender: data.alias,
-                //         body: 'joined the conversation. . .',
-                //         sentAt: Date.now()
-                //     }
-                // sendMessage(messageToSend)
-                // } 
-            if (
-                typeof data.sender !== 'string' ||
-                typeof data.body !== 'string' ||
-                typeof data.id !== 'number'
-            ) {
-                console.error('Invalid message');
-                return;
-            }
-            else {
-                const messageToSend = {
-                    sender: data.sender,
-                    body: data.body,
-                    id: data.id,
-                    sentAt: Date.now()
-                }
-            sendMessage(messageToSend);
-            }
-        } catch (e) {
-            console.error('Error passing message!', e)
-        }
-    });
-
-    socket.on('close', (code, reason) => {
-        // const messageToSend = {
-        //     sender: user.alias,
-        //     body: 'left the conversation. . .',
-        //     sentAt: Date.now()
-        // }
-        // sendMessage(messageToSend)
-        users.delete(userRef);
-        const online = {body:[]}
-                for (user of users.values()){
-                    !online.body.includes(user.alias)
-                        && online.body.push(user.alias)  
-                }
-        sendMessage(online)
-        console.log(`Connection closed: ${code} ${reason}!`);
-    });
-});
-
-const sendMessage = (message) => {
-    // console.log(Array.isArray(message))
-    // Array.isArray(message) ? socket.send(JSON.stringify(message)) :
-    users.forEach((user) => {
-        // console.log(message)
-        user.socket.send(JSON.stringify(message));
-    });
+var options = {
+    debug: true,
+    path: '/hicetnunc',
+    allow_discovery: true,
+    alive_timeout: 80000,
 }
+const peerServer = ExpressPeerServer(server, options);
+app.use('/', peerServer)
+
+// peerServer.on('connection', (client) => {
+// })
+// peerServer.on('disconnect', (client) => {
+// })

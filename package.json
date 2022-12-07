@@ -1,17 +1,16 @@
 {
     "private": true,
-    "name": "websocket-chat-room-server",
-    "description": "A React chat room application, powered by WebSocket",
+    "name": "hicetnunc-p2p-chat",
+    "description": "peer.js",
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
         "start": "node ."
     },
     "dependencies": {
-        "bufferutil": "^4.0.7",
         "cors": "^2.8.5",
         "express": "^4.18.2",
-        "utf-8-validate": "^5.0.10",
-        "ws": "^8.10.0"
+        "peer": "^0.6.1",
+        "socket.io": "^4.5.4"
     }
 }
